@@ -92,11 +92,12 @@ function App() {
                                 >
                                     <option>Choose status</option>
                                     {status.map((el, index) =>
-                                        <div  key={index}>
+
                                         <option
+                                            key={index}
                                             value={el}
                                         >{el}</option>
-                                        </div>
+
                                     )}
                                 </Form.Select>
 
