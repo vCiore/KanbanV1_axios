@@ -1,8 +1,8 @@
 import {Button, Card, CardBody, CardFooter, CardSubtitle, CardTitle, FormControl} from "react-bootstrap";
 import {ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Pencil, TrashFill} from "react-bootstrap-icons";
 import {useState} from "react";
-import {changeTaskPriority, changeTaskStatus, deleteTask, editTask} from "./API/tasksServices";
-import {useDispatch} from "react-redux";
+import {deleteTask, editTask} from "./API/tasksServices";
+import {useDispatch, useSelector} from "react-redux";
 
 
 const Task = ({task}) => {
@@ -10,23 +10,34 @@ const Task = ({task}) => {
     const [editModeOn, setEditModeOn] = useState(false)
     const [newNameTask, setNewNameTask] = useState(task.name)
     const dispatch = useDispatch()
+    const statuses = useSelector(state => state.statuses)
+    const status1 = statuses.map(el => el.status)
 
 
     const deleteTaskById = (taskId) => {
         dispatch(deleteTask (taskId))
     }
 
-    const editTaskName = (task) => {
-        dispatch(editTask(newNameTask, task))
+    const editTaskName = (NewNameTask, task) => {
+        task = {...task, name: newNameTask}
+        dispatch(editTask(task))
         setEditModeOn(false)
     }
 
     const editTaskPriority = (task, direction) => {
-        dispatch(changeTaskPriority(task, direction))
+        if (direction === 'up') { task = {...task, priority: +task.priority + 1} }
+        if (direction === 'down') { task = {...task, priority: +task.priority - 1} }
+        dispatch(editTask(task))
     }
 
     const editTaskStatus = (task, direction) => {
-        dispatch(changeTaskStatus(task, direction))
+        if (direction === 'left') {
+            task = {...task, status: status1[status1.indexOf(task.status) - 1] }
+        }
+        if (direction === 'right') {
+            task = {...task, status: status1[status1.indexOf(task.status) + 1] }
+        }
+        dispatch(editTask(task))
     }
 
 
@@ -43,7 +54,6 @@ const Task = ({task}) => {
                         </CardTitle>
 
                         <CardSubtitle>
-                            {/*<h4>{task.status}</h4>*/}
                             <h5
                                 style={{fontWeight: 'bold'}}
                             >
@@ -107,7 +117,7 @@ const Task = ({task}) => {
                             <Button
                                 variant='outline-danger'
                                 className='button'
-                               onClick={() =>editTaskName(task)}
+                               onClick={() =>editTaskName(newNameTask, task)}
                             >
                                 ok
                             </Button>
