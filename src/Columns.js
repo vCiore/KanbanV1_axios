@@ -11,7 +11,7 @@ const Columns = ({column}) => {
 
     useEffect(() => {
         dispatch(getTasks())
-    }, [])
+    },[])
 
 
     return (
@@ -27,6 +27,7 @@ const Columns = ({column}) => {
             {tasks.filter(task => task.status === column.status)
                 .sort((a, b) => +b.priority - +a.priority)
                 .map(task =>(
+
                     <Task
                         key={task.id}
                         task={task}

@@ -8,13 +8,12 @@ import Columns from "./Columns";
 
 
 function App() {
-
-    const status = ['To do', 'In progress', 'Review', 'Done']
     const priority = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 
     const dispatch = useDispatch()
     const statuses = useSelector(state => state.statuses)
+    const status = statuses.map(el => el.status)
 
     const [newTaskName, setNewTaskName] = useState('')
     const [newTaskPriority, setNewTaskPriority] = useState('')
@@ -93,10 +92,11 @@ function App() {
                                 >
                                     <option>Choose status</option>
                                     {status.map((el, index) =>
+                                        <div  key={index}>
                                         <option
-                                            key={index}
                                             value={el}
                                         >{el}</option>
+                                        </div>
                                     )}
                                 </Form.Select>
 
@@ -108,10 +108,12 @@ function App() {
                                 >
                                     <option>Choose priority</option>
                                     {priority.map((el, index) =>
+
                                         <option
                                             key={index}
                                             value={el}
                                         >{el}</option>
+
                                     )}
                                 </Form.Select>
 
